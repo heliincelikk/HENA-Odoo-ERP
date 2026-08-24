@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:15
+    container_name: hena-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - hena-postgres-data:/var/lib/postgresql/data
+
+  odoo:
+    image: odoo:18
+    container_name: hena-odoo
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    environment:
+      HOST: db
+      USER: ${POSTGRES_USER}
+      PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - hena-odoo-data:/var/lib/odoo
+
+volumes:
+  hena-postgres-data:
+  hena-odoo-data:
